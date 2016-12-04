@@ -60,6 +60,8 @@ namespace AlternativeScreenLocker
             this.TopMost = true;
             this.WindowState = FormWindowState.Normal;
             ttMain.Focus();
+
+            startLookinfForVD = true;
         }
 
         private void frmLock_Load(object sender, EventArgs e)
@@ -76,6 +78,7 @@ namespace AlternativeScreenLocker
 
 
         // SO? 570045/1997873
+        bool startLookinfForVD = false;
         private void frmLock_Deactivate(object sender, EventArgs e)
         {
             this.TopMost = true;
@@ -120,7 +123,8 @@ namespace AlternativeScreenLocker
         bool mouseDirection = true;
 
         // For all forms:
-        public static DateTime startTime = DateTime.Now; 
+        public static DateTime startTime = DateTime.Now;
+        public static VirtualDesktopManager VDmanager = new VirtualDesktopManager();
 
         private void tmrSync_Tick(object sender, EventArgs e)
         {
@@ -159,7 +163,14 @@ namespace AlternativeScreenLocker
                     mouseDirection = !mouseDirection;
                 }
 
-                
+                if (startLookinfForVD )
+                {
+                    if (!VDmanager.IsWindowOnCurrentVirtualDesktop(this.Handle))
+                    {
+                        Application.Restart(); // Open in new window in selected virtual desktop!
+                    }
+                }
+
             }
 
             lblUptime.Text = "Uptime: " + (DateTime.Now - startTime).ToString(@"d\.hh\:mm\:ss");
