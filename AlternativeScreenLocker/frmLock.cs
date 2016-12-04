@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -62,6 +63,28 @@ namespace AlternativeScreenLocker
             ttMain.Focus();
 
             startLookinfForVD = true;
+
+            // Start playing video in loop:
+            string[] videos = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Videos"),"*.mp4");
+            string chosenVideo = videos[(new Random()).Next(videos.Length)];
+            Debug.WriteLine("Playing: " + chosenVideo);
+            axWindowsMediaPlayer1.URL = chosenVideo;
+            axWindowsMediaPlayer1.settings.volume = 0; // mute anyway
+            axWindowsMediaPlayer1.settings.mute = true;
+            axWindowsMediaPlayer1.PlayStateChange += AxWindowsMediaPlayer1_PlayStateChange;
+            axWindowsMediaPlayer1.Ctlcontrols.play();
+            axWindowsMediaPlayer1.uiMode = "none";
+
+        }
+
+        private void AxWindowsMediaPlayer1_PlayStateChange(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
+        {
+            //https://social.msdn.microsoft.com/Forums/windows/en-US/ac133255-2f18-4cd6-a6a1-e83549496794/axwindowsmediaplayer1-media-repeat?forum=winforms
+            if (axWindowsMediaPlayer1.playState == WMPLib.WMPPlayState.wmppsStopped)
+            {
+                axWindowsMediaPlayer1.Ctlcontrols.play();
+                axWindowsMediaPlayer1.uiMode = "none";
+            }
         }
 
         private void frmLock_Load(object sender, EventArgs e)

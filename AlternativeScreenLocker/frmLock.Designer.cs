@@ -39,21 +39,24 @@
             this.pbBG = new System.Windows.Forms.PictureBox();
             this.ttMain = new System.Windows.Forms.TextBox();
             this.tmrMonitor = new System.Windows.Forms.Timer(this.components);
+            this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
             this.grpSetting.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBG)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
             this.SuspendLayout();
             // 
             // grpSetting
             // 
             this.grpSetting.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.grpSetting.Controls.Add(this.axWindowsMediaPlayer1);
             this.grpSetting.Controls.Add(this.lblDes);
             this.grpSetting.Controls.Add(this.cbMouse);
             this.grpSetting.Controls.Add(this.cbBG);
             this.grpSetting.Controls.Add(this.lblUptime);
             this.grpSetting.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.grpSetting.Location = new System.Drawing.Point(12, 655);
+            this.grpSetting.Location = new System.Drawing.Point(12, 501);
             this.grpSetting.Name = "grpSetting";
-            this.grpSetting.Size = new System.Drawing.Size(365, 126);
+            this.grpSetting.Size = new System.Drawing.Size(365, 280);
             this.grpSetting.TabIndex = 1;
             this.grpSetting.TabStop = false;
             // 
@@ -132,6 +135,15 @@
             this.tmrMonitor.Enabled = true;
             this.tmrMonitor.Tick += new System.EventHandler(this.tmrMonitor_Tick);
             // 
+            // axWindowsMediaPlayer1
+            // 
+            this.axWindowsMediaPlayer1.Enabled = true;
+            this.axWindowsMediaPlayer1.Location = new System.Drawing.Point(10, 129);
+            this.axWindowsMediaPlayer1.Name = "axWindowsMediaPlayer1";
+            this.axWindowsMediaPlayer1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWindowsMediaPlayer1.OcxState")));
+            this.axWindowsMediaPlayer1.Size = new System.Drawing.Size(341, 145);
+            this.axWindowsMediaPlayer1.TabIndex = 4;
+            // 
             // frmLock
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -153,6 +165,7 @@
             this.grpSetting.ResumeLayout(false);
             this.grpSetting.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBG)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -168,6 +181,7 @@
         private System.Windows.Forms.Label lblDes;
         private System.Windows.Forms.TextBox ttMain;
         private System.Windows.Forms.Timer tmrMonitor;
+        private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer1;
     }
 }
 
