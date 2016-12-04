@@ -179,6 +179,8 @@ namespace AlternativeScreenLocker
 
         // For all forms:
         public static DateTime startTime = DateTime.Now;
+        public TimeSpan timePassed = TimeSpan.FromSeconds(0);
+
         public static VirtualDesktopManager VDmanager = new VirtualDesktopManager();
 
         private void tmrSync_Tick(object sender, EventArgs e)
@@ -232,9 +234,11 @@ namespace AlternativeScreenLocker
 
             }
 
+            timePassed += TimeSpan.FromMilliseconds(tmrSync.Interval);
+
             lblUptime.Text = "Uptime: " 
-                + (DateTime.Now - startTime).ToString(@"d\.hh\:mm\:ss")
-                + ", From: "
+                + timePassed.ToString(@"d\.hh\:mm\:ss")
+                + ", Loaded: "
                 + startTime.ToShortDateString() + " " + startTime.ToShortTimeString()
                 ;
         }
