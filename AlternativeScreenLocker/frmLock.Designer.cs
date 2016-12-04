@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmLock));
             this.grpSetting = new System.Windows.Forms.GroupBox();
             this.lblDes = new System.Windows.Forms.Label();
             this.cbMouse = new System.Windows.Forms.CheckBox();
@@ -142,6 +143,7 @@
             this.Controls.Add(this.grpSetting);
             this.Controls.Add(this.pbBG);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmLock";
             this.ShowInTaskbar = false;
             this.Activated += new System.EventHandler(this.frmLock_Activated);
