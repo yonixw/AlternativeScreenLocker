@@ -173,7 +173,11 @@ namespace AlternativeScreenLocker
 
             }
 
-            lblUptime.Text = "Uptime: " + (DateTime.Now - startTime).ToString(@"d\.hh\:mm\:ss");
+            lblUptime.Text = "Uptime: " 
+                + (DateTime.Now - startTime).ToString(@"d\.hh\:mm\:ss")
+                + ", From: "
+                + startTime.ToShortDateString() + " " + startTime.ToShortTimeString()
+                ;
         }
 
         private void ttMain_TextChanged(object sender, EventArgs e)
