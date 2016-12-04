@@ -182,6 +182,9 @@ namespace AlternativeScreenLocker
                     curretnMouse.Offset(movement);
                     Cursor.Position = curretnMouse;
 
+                    // Try using SendInput Win32 API
+                    MouseSimulator.ClickRightMouseButton();
+
                     // For next time:
                     mouseDirection = !mouseDirection;
                 }
