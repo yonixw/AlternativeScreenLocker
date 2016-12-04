@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,6 +16,35 @@ namespace AlternativeScreenLocker
 {
     public partial class frmLock : Form
     {
+        #region Set thread state busy
+        // SO? 6302309/1997873
+        // Import SetThreadExecutionState Win32 API and necessary flags
+        [DllImport("kernel32.dll")]
+        public static extern uint SetThreadExecutionState(uint esFlags);
+        public const uint ES_CONTINUOUS = 0x80000000;
+        public const uint ES_SYSTEM_REQUIRED = 0x00000001;
+
+        private uint fPreviousExecutionState;
+
+
+        void SetBusy() {
+            // Set new state to prevent system sleep
+            fPreviousExecutionState = SetThreadExecutionState(
+                ES_CONTINUOUS | ES_SYSTEM_REQUIRED);
+            if (fPreviousExecutionState == 0)
+            {
+                Console.WriteLine("SetThreadExecutionState failed. Do something here...");
+                Close();
+            }
+        }
+
+        void SetFree() {
+            // At this point no erro checking.
+            SetThreadExecutionState(fPreviousExecutionState);
+        }
+        #endregion
+
+
         int screenId;
         public frmLock(int id=0)
         {
@@ -75,6 +105,8 @@ namespace AlternativeScreenLocker
             axWindowsMediaPlayer1.Ctlcontrols.play();
             axWindowsMediaPlayer1.uiMode = "none";
 
+            // Set form as busy:
+            SetBusy();
         }
 
         private void AxWindowsMediaPlayer1_PlayStateChange(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
@@ -183,6 +215,7 @@ namespace AlternativeScreenLocker
                     Cursor.Position = curretnMouse;
 
                     // Try using SendInput Win32 API
+                    // SO ? 5094398
                     MouseSimulator.ClickRightMouseButton();
 
                     // For next time:
@@ -210,7 +243,10 @@ namespace AlternativeScreenLocker
         {
             // Exit on password
             if (ttMain.Text == AlternativeScreenLocker.Properties.Settings.Default.p)
+            {
+                SetFree();
                 Application.Exit();
+            }
         }
 
         private void tmrMonitor_Tick(object sender, EventArgs e)
