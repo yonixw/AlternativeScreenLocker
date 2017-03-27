@@ -43,6 +43,12 @@ namespace AlternativeScreenLocker
             // At this point no erro checking.
             SetThreadExecutionState(fPreviousExecutionState);
         }
+
+        void SetFreeAndRestart()
+        {
+            SetFree();
+            Application.Restart();
+        }
         #endregion
 
 
@@ -71,6 +77,8 @@ namespace AlternativeScreenLocker
 
         void initForm(int sID) {
             int myProcessId = Process.GetCurrentProcess().Id;
+
+            // Close same process if exist.
             foreach(Process p in Process.GetProcessesByName("AlternativeScreenLocker")) {
                 if (p.Id != myProcessId)
                     p.Kill();
@@ -100,6 +108,7 @@ namespace AlternativeScreenLocker
             this.WindowState = FormWindowState.Normal;
             ttMain.Focus();
 
+            // Windows 10 Virtual Desktops:
             startLookinfForVD = true;
 
             // Start playing video in loop:
@@ -127,14 +136,28 @@ namespace AlternativeScreenLocker
             }
         }
 
-        public static List<frmLock> allOpenedForms = new List<frmLock>();
+        public class LockWindow
+        {
+            public frmLock LockForm;
+            public string LockBounds;
+            public string ScreenName;
+        }
+
+        public static List<LockWindow> allOpenedForms = new List<LockWindow>();
         private void frmLock_Load(object sender, EventArgs e)
         {
             if (screenId == 0) {
 
                 for(int i=1; i<Screen.AllScreens.Length;i++) {
                     frmLock item = new frmLock(i);
-                    allOpenedForms.Add(item);
+                    allOpenedForms.Add(
+                        new LockWindow()
+                        {
+                            LockForm = item,
+                            LockBounds = Screen.AllScreens[i].Bounds.ToString(),
+                            ScreenName = Screen.AllScreens[i].DeviceName
+                        }
+                        );
                     item.Show();
                 }
             }
@@ -228,7 +251,7 @@ namespace AlternativeScreenLocker
 
                     // Try using SendInput Win32 API
                     // SO ? 5094398
-                    MouseSimulator.ClickRightMouseButton();
+                    MouseSimulator.ClickLeftMouseButton(); // No point with right
 
                     // For next time:
                     mouseDirection = !mouseDirection;
@@ -238,11 +261,37 @@ namespace AlternativeScreenLocker
                 {
                     if (!VDmanager.IsWindowOnCurrentVirtualDesktop(this.Handle))
                     {
-                        Application.Restart(); // Open in new window in selected virtual desktop!
+                        // Open in new window in selected virtual desktop!
+                        SetFreeAndRestart();
+                    }
+                }
+
+
+                // Detect if new screen was added 
+                foreach (Screen scr in Screen.AllScreens)
+                {
+                    bool found = false;
+                    foreach (LockWindow objLock in allOpenedForms)
+                    {
+                        if (
+                            scr.Bounds.ToString() == objLock.LockBounds
+                            && scr.DeviceName == objLock.ScreenName
+                            && scr.Bounds.Contains(objLock.LockForm.Location)
+                            )
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) // A screen without locking form to it
+                    {
+                        SetFreeAndRestart();
                     }
                 }
 
             }
+
 
             timePassed += TimeSpan.FromMilliseconds(tmrSync.Interval);
 
@@ -291,8 +340,7 @@ namespace AlternativeScreenLocker
             // Prevent closing from alt-tab
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                SetFree();
-                Application.Restart();
+                SetFreeAndRestart();
             }
         }
     }
