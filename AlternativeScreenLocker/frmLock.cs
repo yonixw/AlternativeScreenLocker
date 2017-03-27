@@ -95,6 +95,7 @@ namespace AlternativeScreenLocker
 
             if (sID != 0) {
                 cbMouse.Enabled = false;
+                ttMain.Visible = false;
             }
 
             pbBG.Location = new Point(0, 0);
@@ -147,8 +148,16 @@ namespace AlternativeScreenLocker
         private void frmLock_Load(object sender, EventArgs e)
         {
             if (screenId == 0) {
+                allOpenedForms.Add(
+                        new LockWindow()
+                        {
+                            LockForm = this,
+                            LockBounds = Screen.AllScreens[0].Bounds.ToString(),
+                            ScreenName = Screen.AllScreens[0].DeviceName
+                        }
+                        );
 
-                for(int i=1; i<Screen.AllScreens.Length;i++) {
+                for (int i=1; i<Screen.AllScreens.Length;i++) {
                     frmLock item = new frmLock(i);
                     allOpenedForms.Add(
                         new LockWindow()
@@ -159,6 +168,9 @@ namespace AlternativeScreenLocker
                         }
                         );
                     item.Show();
+
+                    //Console.WriteLine("Added form to screen {0} with borders {1}"
+                    //    , Screen.AllScreens[i].DeviceName, Screen.AllScreens[i].Bounds.ToString());
                 }
             }
             initForm(screenId);
@@ -175,7 +187,7 @@ namespace AlternativeScreenLocker
 
         private void frmLock_Activated(object sender, EventArgs e)
         {
-            ttMain.Focus();
+            //ttMain.Focus(); Only in main Form!
         }
 
         TimeSpan replaceBGImageInterval = TimeSpan.FromMinutes(5);
@@ -205,6 +217,11 @@ namespace AlternativeScreenLocker
             {
                 Debug.WriteLine(ex.Message + "\n\n" + ex.StackTrace);
             }
+        }
+
+        static Point centerBox(Rectangle Bound)
+        {
+            return new Point(Bound.X + Bound.Width / 2, Bound.Y + Bound.Height / 2);
         }
 
         // Flag to move forward or backward
@@ -276,7 +293,9 @@ namespace AlternativeScreenLocker
                         if (
                             scr.Bounds.ToString() == objLock.LockBounds
                             && scr.DeviceName == objLock.ScreenName
-                            && scr.Bounds.Contains(objLock.LockForm.Location)
+                            && scr.Bounds.Contains(
+                                centerBox(objLock.LockForm.Bounds)
+                                )
                             )
                         {
                             found = true;
@@ -286,11 +305,16 @@ namespace AlternativeScreenLocker
 
                     if (!found) // A screen without locking form to it
                     {
+                        Console.WriteLine("Didnt found: " + scr.DeviceName);
                         SetFreeAndRestart();
                     }
                 }
 
             }
+
+            // Get control:
+            this.TopMost = !Config.Default.debug;
+            this.WindowState = FormWindowState.Normal;
 
 
             timePassed += TimeSpan.FromMilliseconds(tmrSync.Interval);
@@ -313,10 +337,7 @@ namespace AlternativeScreenLocker
 
         private void tmrMonitor_Tick(object sender, EventArgs e)
         {
-            // Get control:
-            this.TopMost = !Config.Default.debug;
-            this.WindowState = FormWindowState.Normal;
-            ttMain.Focus();
+           
 
 
             if (Config.Default.debug == false)
