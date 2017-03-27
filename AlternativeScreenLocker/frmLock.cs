@@ -95,7 +95,7 @@ namespace AlternativeScreenLocker
 
             if (sID != 0) {
                 cbMouse.Enabled = false;
-                ttMain.Visible = false;
+                //ttMain.Visible = false; Can cause bugs!
             }
 
             pbBG.Location = new Point(0, 0);
