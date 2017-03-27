@@ -264,12 +264,24 @@ namespace AlternativeScreenLocker
 
         private void tmrMonitor_Tick(object sender, EventArgs e)
         {
+            // Get control:
+            this.TopMost = !Config.Default.debug;
+            this.WindowState = FormWindowState.Normal;
+            ttMain.Focus();
+
 
             if (Config.Default.debug == false)
             {
                 foreach (Process p in Process.GetProcessesByName("Taskmgr"))
                 {
-                    p.Kill();
+                    try
+                    {
+                        p.Kill();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message); // Usually only on Access is Denied
+                    }
                 } 
             }
         }
