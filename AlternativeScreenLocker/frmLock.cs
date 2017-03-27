@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Config = AlternativeScreenLocker.Properties.Settings;
 
 namespace AlternativeScreenLocker
 {
@@ -45,7 +46,7 @@ namespace AlternativeScreenLocker
         #endregion
 
 
-        int screenId;
+        int screenId = 0;
         public frmLock(int id=0)
         {
             this.screenId = id;
@@ -69,6 +70,13 @@ namespace AlternativeScreenLocker
         }
 
         void initForm(int sID) {
+            int myProcessId = Process.GetCurrentProcess().Id;
+            foreach(Process p in Process.GetProcessesByName("AlternativeScreenLocker")) {
+                if (p.Id != myProcessId)
+                    p.Kill();
+            }
+
+
             Rectangle bounds = Screen.AllScreens[sID].Bounds;
 
             this.Location = originFromRectangle(bounds);
@@ -88,7 +96,7 @@ namespace AlternativeScreenLocker
             ttMain.Location = new Point(this.Width / 2 - ttMain.Width/2, this.Height/2 - ttMain.Height/2);
 
             // Get control:
-            this.TopMost = true;
+            this.TopMost = !Config.Default.debug;
             this.WindowState = FormWindowState.Normal;
             ttMain.Focus();
 
@@ -119,13 +127,15 @@ namespace AlternativeScreenLocker
             }
         }
 
+        public static List<frmLock> allOpenedForms = new List<frmLock>();
         private void frmLock_Load(object sender, EventArgs e)
         {
             if (screenId == 0) {
-               
 
                 for(int i=1; i<Screen.AllScreens.Length;i++) {
-                    (new frmLock(i)).Show();
+                    frmLock item = new frmLock(i);
+                    allOpenedForms.Add(item);
+                    item.Show();
                 }
             }
             initForm(screenId);
@@ -136,7 +146,7 @@ namespace AlternativeScreenLocker
         bool startLookinfForVD = false;
         private void frmLock_Deactivate(object sender, EventArgs e)
         {
-            this.TopMost = true;
+            this.TopMost = !Config.Default.debug;
             this.WindowState = FormWindowState.Normal;
         }
 
@@ -246,18 +256,21 @@ namespace AlternativeScreenLocker
         private void ttMain_TextChanged(object sender, EventArgs e)
         {
             // Exit on password
-            if (ttMain.Text == AlternativeScreenLocker.Properties.Settings.Default.p)
+            if (ttMain.Text == Config.Default.p)
             {
-                SetFree();
                 Application.Exit();
             }
         }
 
         private void tmrMonitor_Tick(object sender, EventArgs e)
         {
-            foreach (Process p in Process.GetProcessesByName("Taskmgr"))
+
+            if (Config.Default.debug == false)
             {
-                p.Kill();
+                foreach (Process p in Process.GetProcessesByName("Taskmgr"))
+                {
+                    p.Kill();
+                } 
             }
         }
 
@@ -265,7 +278,10 @@ namespace AlternativeScreenLocker
         {
             // Prevent closing from alt-tab
             if (e.CloseReason == CloseReason.UserClosing)
+            {
+                SetFree();
                 Application.Restart();
+            }
         }
     }
 }

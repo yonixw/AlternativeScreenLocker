@@ -31,5 +31,14 @@ namespace AlternativeScreenLocker.Properties {
                 return ((string)(this["p"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool debug {
+            get {
+                return ((bool)(this["debug"]));
+            }
+        }
     }
 }
