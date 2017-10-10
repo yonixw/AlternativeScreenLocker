@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmLock));
             this.grpSetting = new System.Windows.Forms.GroupBox();
+            this.btnDebugQuit = new System.Windows.Forms.Button();
             this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
             this.lblDes = new System.Windows.Forms.Label();
             this.cbMouse = new System.Windows.Forms.CheckBox();
@@ -41,7 +42,6 @@
             this.ttMain = new System.Windows.Forms.TextBox();
             this.tmrMonitor = new System.Windows.Forms.Timer(this.components);
             this.tmrInit = new System.Windows.Forms.Timer(this.components);
-            this.btnDebugQuit = new System.Windows.Forms.Button();
             this.grpSetting.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBG)).BeginInit();
@@ -62,6 +62,17 @@
             this.grpSetting.Size = new System.Drawing.Size(365, 280);
             this.grpSetting.TabIndex = 1;
             this.grpSetting.TabStop = false;
+            // 
+            // btnDebugQuit
+            // 
+            this.btnDebugQuit.Location = new System.Drawing.Point(276, 62);
+            this.btnDebugQuit.Name = "btnDebugQuit";
+            this.btnDebugQuit.Size = new System.Drawing.Size(75, 56);
+            this.btnDebugQuit.TabIndex = 4;
+            this.btnDebugQuit.Text = "Exit";
+            this.btnDebugQuit.UseVisualStyleBackColor = true;
+            this.btnDebugQuit.Click += new System.EventHandler(this.btnDebugQuit_Click);
+            this.btnDebugQuit.KeyUp += new System.Windows.Forms.KeyEventHandler(this.myKeyUp);
             // 
             // axWindowsMediaPlayer1
             // 
@@ -93,6 +104,7 @@
             this.cbMouse.TabIndex = 4;
             this.cbMouse.Text = "Move mouse";
             this.cbMouse.UseVisualStyleBackColor = true;
+            this.cbMouse.KeyUp += new System.Windows.Forms.KeyEventHandler(this.myKeyUp);
             // 
             // cbBG
             // 
@@ -105,6 +117,7 @@
             this.cbBG.TabIndex = 3;
             this.cbBG.Text = "Random background";
             this.cbBG.UseVisualStyleBackColor = true;
+            this.cbBG.KeyUp += new System.Windows.Forms.KeyEventHandler(this.myKeyUp);
             // 
             // lblUptime
             // 
@@ -142,7 +155,6 @@
             this.ttMain.TabIndex = 3;
             this.ttMain.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ttMain.TextChanged += new System.EventHandler(this.ttMain_TextChanged);
-            this.ttMain.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ttMain_KeyUp);
             // 
             // tmrMonitor
             // 
@@ -152,16 +164,6 @@
             // tmrInit
             // 
             this.tmrInit.Tick += new System.EventHandler(this.tmrInit_Tick);
-            // 
-            // btnDebugQuit
-            // 
-            this.btnDebugQuit.Location = new System.Drawing.Point(276, 62);
-            this.btnDebugQuit.Name = "btnDebugQuit";
-            this.btnDebugQuit.Size = new System.Drawing.Size(75, 56);
-            this.btnDebugQuit.TabIndex = 4;
-            this.btnDebugQuit.Text = "Exit";
-            this.btnDebugQuit.UseVisualStyleBackColor = true;
-            this.btnDebugQuit.Click += new System.EventHandler(this.btnDebugQuit_Click);
             // 
             // frmLock
             // 
@@ -181,6 +183,7 @@
             this.Deactivate += new System.EventHandler(this.frmLock_Deactivate);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmLock_FormClosing);
             this.Load += new System.EventHandler(this.frmLock_Load);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.myKeyUp);
             this.grpSetting.ResumeLayout(false);
             this.grpSetting.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
