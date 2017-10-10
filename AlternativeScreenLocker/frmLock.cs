@@ -106,6 +106,7 @@ namespace AlternativeScreenLocker
 
             // Get control:
             this.TopMost = !Config.Default.debug;
+            btnDebugQuit.Visible = Config.Default.debug;
             this.WindowState = FormWindowState.Normal;
             ttMain.Focus();
 
@@ -385,6 +386,11 @@ namespace AlternativeScreenLocker
             }
 
             ttMain.Text = "Pass: " + SharedData.Instance.CurrentPassword.Length;
+        }
+
+        private void btnDebugQuit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

@@ -41,6 +41,7 @@
             this.ttMain = new System.Windows.Forms.TextBox();
             this.tmrMonitor = new System.Windows.Forms.Timer(this.components);
             this.tmrInit = new System.Windows.Forms.Timer(this.components);
+            this.btnDebugQuit = new System.Windows.Forms.Button();
             this.grpSetting.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbBG)).BeginInit();
@@ -49,6 +50,7 @@
             // grpSetting
             // 
             this.grpSetting.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.grpSetting.Controls.Add(this.btnDebugQuit);
             this.grpSetting.Controls.Add(this.axWindowsMediaPlayer1);
             this.grpSetting.Controls.Add(this.lblDes);
             this.grpSetting.Controls.Add(this.cbMouse);
@@ -131,6 +133,7 @@
             // 
             // ttMain
             // 
+            this.ttMain.Enabled = false;
             this.ttMain.Font = new System.Drawing.Font("Wingdings 2", 32.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
             this.ttMain.Location = new System.Drawing.Point(197, 323);
             this.ttMain.Name = "ttMain";
@@ -149,6 +152,16 @@
             // tmrInit
             // 
             this.tmrInit.Tick += new System.EventHandler(this.tmrInit_Tick);
+            // 
+            // btnDebugQuit
+            // 
+            this.btnDebugQuit.Location = new System.Drawing.Point(276, 62);
+            this.btnDebugQuit.Name = "btnDebugQuit";
+            this.btnDebugQuit.Size = new System.Drawing.Size(75, 56);
+            this.btnDebugQuit.TabIndex = 4;
+            this.btnDebugQuit.Text = "Exit";
+            this.btnDebugQuit.UseVisualStyleBackColor = true;
+            this.btnDebugQuit.Click += new System.EventHandler(this.btnDebugQuit_Click);
             // 
             // frmLock
             // 
@@ -189,6 +202,7 @@
         private System.Windows.Forms.Timer tmrMonitor;
         private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer1;
         private System.Windows.Forms.Timer tmrInit;
+        private System.Windows.Forms.Button btnDebugQuit;
     }
 }
 
