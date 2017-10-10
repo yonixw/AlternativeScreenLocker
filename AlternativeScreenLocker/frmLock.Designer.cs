@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmLock));
             this.grpSetting = new System.Windows.Forms.GroupBox();
+            this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
             this.lblDes = new System.Windows.Forms.Label();
             this.cbMouse = new System.Windows.Forms.CheckBox();
             this.cbBG = new System.Windows.Forms.CheckBox();
@@ -39,10 +40,10 @@
             this.pbBG = new System.Windows.Forms.PictureBox();
             this.ttMain = new System.Windows.Forms.TextBox();
             this.tmrMonitor = new System.Windows.Forms.Timer(this.components);
-            this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
+            this.tmrInit = new System.Windows.Forms.Timer(this.components);
             this.grpSetting.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbBG)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbBG)).BeginInit();
             this.SuspendLayout();
             // 
             // grpSetting
@@ -59,6 +60,15 @@
             this.grpSetting.Size = new System.Drawing.Size(365, 280);
             this.grpSetting.TabIndex = 1;
             this.grpSetting.TabStop = false;
+            // 
+            // axWindowsMediaPlayer1
+            // 
+            this.axWindowsMediaPlayer1.Enabled = true;
+            this.axWindowsMediaPlayer1.Location = new System.Drawing.Point(10, 129);
+            this.axWindowsMediaPlayer1.Name = "axWindowsMediaPlayer1";
+            this.axWindowsMediaPlayer1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWindowsMediaPlayer1.OcxState")));
+            this.axWindowsMediaPlayer1.Size = new System.Drawing.Size(341, 145);
+            this.axWindowsMediaPlayer1.TabIndex = 4;
             // 
             // lblDes
             // 
@@ -124,25 +134,21 @@
             this.ttMain.Font = new System.Drawing.Font("Wingdings 2", 32.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
             this.ttMain.Location = new System.Drawing.Point(197, 323);
             this.ttMain.Name = "ttMain";
-            this.ttMain.PasswordChar = 'X';
+            this.ttMain.ReadOnly = true;
             this.ttMain.Size = new System.Drawing.Size(528, 53);
             this.ttMain.TabIndex = 3;
             this.ttMain.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ttMain.TextChanged += new System.EventHandler(this.ttMain_TextChanged);
+            this.ttMain.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ttMain_KeyUp);
             // 
             // tmrMonitor
             // 
             this.tmrMonitor.Enabled = true;
             this.tmrMonitor.Tick += new System.EventHandler(this.tmrMonitor_Tick);
             // 
-            // axWindowsMediaPlayer1
+            // tmrInit
             // 
-            this.axWindowsMediaPlayer1.Enabled = true;
-            this.axWindowsMediaPlayer1.Location = new System.Drawing.Point(10, 129);
-            this.axWindowsMediaPlayer1.Name = "axWindowsMediaPlayer1";
-            this.axWindowsMediaPlayer1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWindowsMediaPlayer1.OcxState")));
-            this.axWindowsMediaPlayer1.Size = new System.Drawing.Size(341, 145);
-            this.axWindowsMediaPlayer1.TabIndex = 4;
+            this.tmrInit.Tick += new System.EventHandler(this.tmrInit_Tick);
             // 
             // frmLock
             // 
@@ -164,8 +170,8 @@
             this.Load += new System.EventHandler(this.frmLock_Load);
             this.grpSetting.ResumeLayout(false);
             this.grpSetting.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbBG)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbBG)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -182,6 +188,7 @@
         private System.Windows.Forms.TextBox ttMain;
         private System.Windows.Forms.Timer tmrMonitor;
         private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer1;
+        private System.Windows.Forms.Timer tmrInit;
     }
 }
 

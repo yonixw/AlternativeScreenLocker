@@ -6,7 +6,7 @@
       <Value Profile="(Default)">6666</Value>
     </Setting>
     <Setting Name="debug" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

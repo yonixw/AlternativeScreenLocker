@@ -75,7 +75,7 @@ namespace AlternativeScreenLocker
             return s.Width + "x" + s.Height ;
         }
 
-        void initForm(int sID) {
+        void initForm(int screenID) {
             int myProcessId = Process.GetCurrentProcess().Id;
 
             // Close same process if exist.
@@ -85,7 +85,7 @@ namespace AlternativeScreenLocker
             }
 
 
-            Rectangle bounds = Screen.AllScreens[sID].Bounds;
+            Rectangle bounds = Screen.AllScreens[screenID].Bounds;
 
             this.Location = originFromRectangle(bounds);
             this.Size = sizeFromRectangle(bounds); // Need Refreshing
@@ -93,7 +93,7 @@ namespace AlternativeScreenLocker
             lblDes.Text = "No. " + screenId + " (" + sizeToString(sizeFromRectangle(bounds)) + ")";
           
 
-            if (sID != 0) {
+            if (screenID != 0) {
                 cbMouse.Enabled = false;
                 //ttMain.Visible = false; Can cause bugs!
             }
@@ -173,7 +173,9 @@ namespace AlternativeScreenLocker
                     //    , Screen.AllScreens[i].DeviceName, Screen.AllScreens[i].Bounds.ToString());
                 }
             }
-            initForm(screenId);
+
+            // Load all componenets with some lag so form is loaded instantly.
+            tmrInit.Enabled = true;
         }
 
 
@@ -329,7 +331,7 @@ namespace AlternativeScreenLocker
         private void ttMain_TextChanged(object sender, EventArgs e)
         {
             // Exit on password
-            if (ttMain.Text == Config.Default.p)
+            if (SharedData.Instance.CurrentPassword == Config.Default.p)
             {
                 Application.Exit();
             }
@@ -363,6 +365,26 @@ namespace AlternativeScreenLocker
             {
                 SetFreeAndRestart();
             }
+        }
+
+        private void tmrInit_Tick(object sender, EventArgs e)
+        {
+            tmrInit.Enabled = false;
+            initForm(screenId);
+        }
+
+        private void ttMain_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Back)
+            {
+                SharedData.Instance.CurrentPassword = SharedData.Instance.CurrentPassword.Substring(0, SharedData.Instance.CurrentPassword.Length - 1);
+            }
+            else
+            {
+                SharedData.Instance.CurrentPassword += (char)e.KeyValue;
+            }
+
+            ttMain.Text = "Pass: " + SharedData.Instance.CurrentPassword.Length;
         }
     }
 }
