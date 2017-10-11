@@ -124,6 +124,9 @@ namespace AlternativeScreenLocker
             axWindowsMediaPlayer1.Ctlcontrols.play();
             axWindowsMediaPlayer1.uiMode = "none";
 
+            tmrMonitor.Enabled = true;
+            tmrSync.Enabled = true;
+
             // Set form as busy:
             SetBusy();
         }
@@ -146,9 +149,46 @@ namespace AlternativeScreenLocker
         }
 
         public static List<LockWindow> allOpenedForms = new List<LockWindow>();
+        string passValidChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+        string actualPass = "";
+
+        private void validatePasword()
+        {
+            bool passIsValid = false; // Until proven true;
+
+            if (!string.IsNullOrEmpty(Config.Default.p))
+            {
+                actualPass = Config.Default.p.ToUpper();
+                bool everyPassCharisOk = true;
+
+                foreach (char c in actualPass)
+                {
+                    if (!passValidChars.Contains(c))
+                    {
+                        everyPassCharisOk = false;
+                        break;
+                    }
+                }
+
+                if (everyPassCharisOk) passIsValid = true;
+            }
+            
+            if (!passIsValid)
+            {
+                MessageBox.Show(
+                    "Your password " + Config.Default.p + " is not valid.\n"
+                    + "Please only use numbers(0-9) and english(A-Z)"
+                    );
+                Application.Exit();
+            }
+        }
+
         private void frmLock_Load(object sender, EventArgs e)
         {
             if (screenId == 0) {
+                // Check if pass is ok:
+                validatePasword();
+
                 allOpenedForms.Add(
                         new LockWindow()
                         {
@@ -315,6 +355,16 @@ namespace AlternativeScreenLocker
 
             }
 
+            // Exit on password
+            if (SharedData.Instance.CurrentPassword == actualPass)
+            {
+                Application.Exit();
+            }
+            else
+            {
+                ttMain.Text =  SharedData.Instance.CurrentPassword.Length + " Chars";
+            }
+
             // Get control:
             this.TopMost = !Config.Default.debug;
             this.WindowState = FormWindowState.Normal;
@@ -331,11 +381,7 @@ namespace AlternativeScreenLocker
 
         private void ttMain_TextChanged(object sender, EventArgs e)
         {
-            // Exit on password
-            if (SharedData.Instance.CurrentPassword == Config.Default.p)
-            {
-                Application.Exit();
-            }
+           
         }
 
         private void tmrMonitor_Tick(object sender, EventArgs e)
@@ -374,18 +420,25 @@ namespace AlternativeScreenLocker
             initForm(screenId);
         }
 
-        private void ttMain_KeyUp(object sender, KeyEventArgs e)
+        private void myKeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Back)
+            if (e.KeyCode == Keys.Back && SharedData.Instance.CurrentPassword.Length > 0)
             {
                 SharedData.Instance.CurrentPassword = SharedData.Instance.CurrentPassword.Substring(0, SharedData.Instance.CurrentPassword.Length - 1);
             }
             else
             {
-                SharedData.Instance.CurrentPassword += (char)e.KeyValue;
+                int key = (int)e.KeyCode;
+
+                if (key >= (int)Keys.D0 && key <= (int)Keys.D9)
+                    SharedData.Instance.CurrentPassword += (char)(key - Keys.D0 + '0');
+                else if (key >= (int)Keys.NumPad0 && key <= (int)Keys.NumPad9)
+                    SharedData.Instance.CurrentPassword += (char)(key - Keys.D0 + '0');
+                else if (key >= (int)Keys.A && key <= (int)Keys.Z)
+                    SharedData.Instance.CurrentPassword += (char)(key - Keys.A + 'A');
             }
 
-            ttMain.Text = "Pass: " + SharedData.Instance.CurrentPassword.Length;
+            
         }
 
         private void btnDebugQuit_Click(object sender, EventArgs e)

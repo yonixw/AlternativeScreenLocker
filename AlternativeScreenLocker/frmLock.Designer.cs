@@ -131,7 +131,6 @@
             // 
             // tmrSync
             // 
-            this.tmrSync.Enabled = true;
             this.tmrSync.Interval = 1000;
             this.tmrSync.Tick += new System.EventHandler(this.tmrSync_Tick);
             // 
@@ -147,18 +146,17 @@
             // ttMain
             // 
             this.ttMain.Enabled = false;
-            this.ttMain.Font = new System.Drawing.Font("Wingdings 2", 32.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.ttMain.Font = new System.Drawing.Font("David", 32.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ttMain.Location = new System.Drawing.Point(197, 323);
             this.ttMain.Name = "ttMain";
             this.ttMain.ReadOnly = true;
-            this.ttMain.Size = new System.Drawing.Size(528, 53);
+            this.ttMain.Size = new System.Drawing.Size(528, 50);
             this.ttMain.TabIndex = 3;
             this.ttMain.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.ttMain.TextChanged += new System.EventHandler(this.ttMain_TextChanged);
             // 
             // tmrMonitor
             // 
-            this.tmrMonitor.Enabled = true;
             this.tmrMonitor.Tick += new System.EventHandler(this.tmrMonitor_Tick);
             // 
             // tmrInit
