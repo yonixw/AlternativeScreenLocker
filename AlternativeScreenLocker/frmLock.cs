@@ -44,10 +44,10 @@ namespace AlternativeScreenLocker
             SetThreadExecutionState(fPreviousExecutionState);
         }
 
-        void SetFreeAndRestart()
+        void SetFreeAndRestart(string reason)
         {
             SetFree();
-            Application.Restart();
+            myApplication.Restart(reason);
         }
         #endregion
 
@@ -149,8 +149,7 @@ namespace AlternativeScreenLocker
         }
 
         public static List<LockWindow> allOpenedForms = new List<LockWindow>();
-        string passValidChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
-        string actualPass = "";
+        static string passValidChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
 
         private void validatePasword()
         {
@@ -158,10 +157,10 @@ namespace AlternativeScreenLocker
 
             if (!string.IsNullOrEmpty(Config.Default.p))
             {
-                actualPass = Config.Default.p.ToUpper();
+                SharedData.Instance.ActualPassword = Config.Default.p.ToUpper();
                 bool everyPassCharisOk = true;
 
-                foreach (char c in actualPass)
+                foreach (char c in SharedData.Instance.ActualPassword)
                 {
                     if (!passValidChars.Contains(c))
                     {
@@ -179,7 +178,7 @@ namespace AlternativeScreenLocker
                     "Your password " + Config.Default.p + " is not valid.\n"
                     + "Please only use numbers(0-9) and english(A-Z)"
                     );
-                Application.Exit();
+                myApplication.Exit("Invalid password");
             }
         }
 
@@ -322,7 +321,7 @@ namespace AlternativeScreenLocker
                     if (!VDmanager.IsWindowOnCurrentVirtualDesktop(this.Handle))
                     {
                         // Open in new window in selected virtual desktop!
-                        SetFreeAndRestart();
+                        SetFreeAndRestart("Switched virtual desktop");
                     }
                 }
 
@@ -349,16 +348,16 @@ namespace AlternativeScreenLocker
                     if (!found) // A screen without locking form to it
                     {
                         Console.WriteLine("Didnt found: " + scr.DeviceName);
-                        SetFreeAndRestart();
+                        SetFreeAndRestart("A screen doesnt have locking on it.");
                     }
                 }
 
             }
 
             // Exit on password
-            if (SharedData.Instance.CurrentPassword == actualPass)
+            if (SharedData.Instance.CurrentPassword == SharedData.Instance.ActualPassword)
             {
-                Application.Exit();
+                myApplication.Exit("Correct password");
             }
             else
             {
@@ -410,7 +409,7 @@ namespace AlternativeScreenLocker
             // Prevent closing from alt-tab
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                SetFreeAndRestart();
+                SetFreeAndRestart("Prevent user from closing.");
             }
         }
 
@@ -443,7 +442,7 @@ namespace AlternativeScreenLocker
 
         private void btnDebugQuit_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            myApplication.Exit("Exit button debug");
         }
     }
 }

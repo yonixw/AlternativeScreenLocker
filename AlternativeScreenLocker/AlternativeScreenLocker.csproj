@@ -55,6 +55,7 @@
       <DependentUpon>frmLock.cs</DependentUpon>
     </Compile>
     <Compile Include="MouseSimulator.cs" />
+    <Compile Include="myApplication.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SharedData.cs" />

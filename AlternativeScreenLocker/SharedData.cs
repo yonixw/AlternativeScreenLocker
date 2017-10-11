@@ -16,6 +16,7 @@ namespace AlternativeScreenLocker
         public static SharedData Instance = new SharedData();
 
         // Members:
+        public string ActualPassword = "";
         public string CurrentPassword = "";
     }
 }
