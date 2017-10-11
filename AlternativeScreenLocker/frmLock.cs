@@ -432,7 +432,7 @@ namespace AlternativeScreenLocker
                 if (key >= (int)Keys.D0 && key <= (int)Keys.D9)
                     SharedData.Instance.CurrentPassword += (char)(key - Keys.D0 + '0');
                 else if (key >= (int)Keys.NumPad0 && key <= (int)Keys.NumPad9)
-                    SharedData.Instance.CurrentPassword += (char)(key - Keys.D0 + '0');
+                    SharedData.Instance.CurrentPassword += (char)(key - Keys.NumPad0 + '0');
                 else if (key >= (int)Keys.A && key <= (int)Keys.Z)
                     SharedData.Instance.CurrentPassword += (char)(key - Keys.A + 'A');
             }
